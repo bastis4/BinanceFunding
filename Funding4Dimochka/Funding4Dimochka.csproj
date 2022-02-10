@@ -11,4 +11,10 @@
     <PackageReference Include="Binance.Net" Version="7.2.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Binance.Net">
+      <HintPath>..\Libraries\Binance.Net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
