@@ -8,21 +8,21 @@ namespace Funding4Dimochka
 {
     public class FuturesUsdtFundingRate
     {
-        public string futureUsdtSymbol { get; set; }
-        public decimal fundingRate { get; set; }
-        public int historyPeriod { get; set; } 
+        public string FutureUsdtSymbol { get; set; }
+        public decimal FundingRate { get; set; }
+        public int HistoryPeriod { get; set; } 
 
         public FuturesUsdtFundingRate(string symbol, decimal funding, int period)
         {
-            futureUsdtSymbol = symbol;
-            fundingRate = funding;
-            historyPeriod = period;
+            FutureUsdtSymbol = symbol;
+            FundingRate = funding;
+            HistoryPeriod = period;
         }
 
         public FuturesUsdtFundingRate(string symbol, int period)
         {
-            futureUsdtSymbol = symbol;
-            historyPeriod = period;
+            FutureUsdtSymbol = symbol;
+            HistoryPeriod = period;
         }
 
     }
