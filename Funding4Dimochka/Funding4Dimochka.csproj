@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="apikey.properties" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="apikey.properties">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Binance.Net" Version="7.2.7" />
   </ItemGroup>
 

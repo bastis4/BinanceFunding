@@ -14,20 +14,22 @@ namespace Funding4Dimochka
 {
     public class Program
     {
-        static string APIKEY = "KAXy7cEVLYf4ZYQzGmFMgX6kXXlFK9nodsE7eKVarIeruurCI0R6W0CIrCLN12hh";
-        static string APISECRET = "ijPy4QI35rduToSiw8e6G1xVSRg6QWcJ9UOYuadk8LryM78lr0qyrLNafM6fthl3";
         static DateTime month = DateTime.Now.AddDays(-30);
         static DateTime week = DateTime.Now.AddDays(-7);
         static DateTime day = DateTime.Now.AddDays(-1);
-        
+
         static List<FuturesUsdtAverageFundingRate> futuresUsdtAverageFundingRateList = new List<FuturesUsdtAverageFundingRate>();
         public static async Task Main()
 
         {
+            var data = new Dictionary<string, string>();
+            foreach (var row in File.ReadAllLines(Environment.CurrentDirectory + @"\apikey.properties"))
+                data.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
 
-            var client = new BinanceClient(new BinanceClientOptions()
+            
+        var client = new BinanceClient(new BinanceClientOptions()
             {
-                ApiCredentials = new ApiCredentials(APIKEY, APISECRET)
+                ApiCredentials = new ApiCredentials(data["API_KEY"], data["API_SECRET"])
 
             });
 
@@ -49,16 +51,16 @@ namespace Funding4Dimochka
 
         public static async Task<List<string>> GetTradingFuturesUsdtSymbols(BinanceClient client)
         {
-           var tradingFuturesUsdtSymbols = new List<string>();
-           var callResult = await client.FuturesUsdt.System.GetExchangeInfoAsync();
-           foreach (var item in callResult.Data.Symbols)
+            var tradingFuturesUsdtSymbols = new List<string>();
+            var callResult = await client.FuturesUsdt.System.GetExchangeInfoAsync();
+            foreach (var item in callResult.Data.Symbols)
             {
                 if (item.Status == SymbolStatus.Trading)
                 {
                     tradingFuturesUsdtSymbols.Add(item.Name);
                 }
             }
-           return tradingFuturesUsdtSymbols;
+            return tradingFuturesUsdtSymbols;
         }
 
         public static async Task<FuturesUsdtAverageFundingRate> GetTradingFuturesUsdtFundingRates(BinanceClient client, string symbol, DateTime startTime)
@@ -76,7 +78,7 @@ namespace Funding4Dimochka
             if (futuresUsdtFundigRatesList != null && futuresUsdtFundigRatesList.Count > 0)
             {
                 averageFundingRate = GetAverageFundingRate(futuresUsdtFundigRatesList);
-            } 
+            }
             FuturesUsdtAverageFundingRate futuresUsdtAverageFundingRate = new FuturesUsdtAverageFundingRate(symbol, period, averageFundingRate);
             return futuresUsdtAverageFundingRate;
         }
