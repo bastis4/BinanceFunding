@@ -12,8 +12,8 @@ namespace Funding4Dimochka
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
             foreach (var row in File.ReadAllLines(Environment.CurrentDirectory + @"\apikey.properties"))
-            data.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
-            
+                data.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
+
             var client = new BinanceClient(new BinanceClientOptions()
             {
                 ApiCredentials = new ApiCredentials(data["API_KEY"], data["API_SECRET"])
@@ -31,8 +31,7 @@ namespace Funding4Dimochka
             {
                 Console.WriteLine(item.Symbol + " " + item.AvgRatePer1Day + " " + item.AvgRatePer7Days + " " + item.AvgRatePer30Days);
             }
-            Console.WriteLine(resultAvgFundingRates.Count);
-
+            Console.WriteLine("Всего монет: " + resultAvgFundingRates.Count);
             Console.ReadKey();
         }
     }

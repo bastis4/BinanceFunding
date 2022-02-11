@@ -38,7 +38,7 @@ namespace Funding4Dimochka
             averageFundingRate.Symbol = symbol;
             averageFundingRate.AvgRatePer1Day = avgPer1Day;
             averageFundingRate.AvgRatePer7Days = avgPer7Days;
-            averageFundingRate.AvgRatePer7Days = avgPer30Days;
+            averageFundingRate.AvgRatePer30Days = avgPer30Days;
             return averageFundingRate;
         }
     }
