@@ -1,11 +1,5 @@
 ﻿using Binance.Net;
 using Binance.Net.Enums;
-using Binance.Net.Objects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Funding4Dimochka
 {
