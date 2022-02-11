@@ -9,7 +9,7 @@ namespace Funding4Dimochka
     public class FuturesUsdtAverageFundingRate : FuturesUsdtFundingRate
     {
         public decimal AverageFundingRate { get; set; }
-        public FuturesUsdtAverageFundingRate(string symbol, int period, decimal average) : base(symbol, period)
+        public FuturesUsdtAverageFundingRate(string symbol, decimal average) : base(symbol)
         {
             AverageFundingRate = average;
         }

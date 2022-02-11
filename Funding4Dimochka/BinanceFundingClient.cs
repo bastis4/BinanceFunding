@@ -19,45 +19,25 @@ namespace Funding4Dimochka
 
         public async Task<List<string>> GetTradingSymbols()
         {
-            var tradingFuturesUsdtSymbols = new List<string>();
+            var tradingSymbols = new List<string>();
             var callResult = await _binanceClient.FuturesUsdt.System.GetExchangeInfoAsync();
             foreach (var item in callResult.Data.Symbols)
             {
-                if (item.Status == SymbolStatus.Trading)
+                if (item.Status == SymbolStatus.Trading && item.ContractType != ContractType.CurrentQuarter)
                 {
-                    tradingFuturesUsdtSymbols.Add(item.Name);
+                    tradingSymbols.Add(item.Name);
                 }
             }
-            return tradingFuturesUsdtSymbols;
+            return tradingSymbols;
         }
-        public async Task<FuturesUsdtAverageFundingRate> GetRates(string symbol, DateTime startTime)
+        public async Task<FuturesUsdtAverageFundingRate> GetAverageRates(string symbol)
         {
             var futuresUsdtFundigRatesList = new List<FuturesUsdtFundingRate>();
-            FuturesUsdtFundingRate futuresUsdtFundingRate;
-            var callResult = await _binanceClient.FuturesUsdt.Market.GetFundingRatesAsync(symbol, startTime: startTime, endTime: DateTime.Now);
-            var period = DateTime.Now.Day - startTime.Day;
-            foreach (var item in callResult.Data)
-            {
-                futuresUsdtFundingRate = new FuturesUsdtFundingRate(symbol, item.FundingRate, period);
-                futuresUsdtFundigRatesList.Add(futuresUsdtFundingRate);
-            }
-            var averageFundingRate = 0M;
-            if (futuresUsdtFundigRatesList != null && futuresUsdtFundigRatesList.Count > 0)
-            {
-                averageFundingRate = GetAverageFundingRate(futuresUsdtFundigRatesList);
-            }
-            FuturesUsdtAverageFundingRate futuresUsdtAverageFundingRate = new FuturesUsdtAverageFundingRate(symbol, period, averageFundingRate);
+            var callResult = await _binanceClient.FuturesUsdt.Market.GetFundingRatesAsync(symbol, startTime: DateTime.Now.AddDays(-1), endTime: DateTime.Now);
+            var averageFundingRate = callResult.Data.Average(x => x.FundingRate);
+
+            FuturesUsdtAverageFundingRate futuresUsdtAverageFundingRate = new FuturesUsdtAverageFundingRate(symbol, averageFundingRate);
             return futuresUsdtAverageFundingRate;
-        }
-        public decimal GetAverageFundingRate(List<FuturesUsdtFundingRate> ratePerSymbolAndPeriodlList)
-        {
-            var totalFundingRatesPerPeriod = 0M;
-            foreach (var futuresUsdtFundingRate in ratePerSymbolAndPeriodlList)
-            {
-                totalFundingRatesPerPeriod += futuresUsdtFundingRate.FundingRate;
-            }
-            var averageFundingRatePerPeriod = totalFundingRatesPerPeriod / ratePerSymbolAndPeriodlList.Count;
-            return averageFundingRatePerPeriod;
         }
     }
 }

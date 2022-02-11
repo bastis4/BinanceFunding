@@ -10,19 +10,16 @@ namespace Funding4Dimochka
     {
         public string FutureUsdtSymbol { get; set; }
         public decimal FundingRate { get; set; }
-        public int HistoryPeriod { get; set; } 
 
-        public FuturesUsdtFundingRate(string symbol, decimal funding, int period)
+        public FuturesUsdtFundingRate(string symbol, decimal funding)
         {
             FutureUsdtSymbol = symbol;
             FundingRate = funding;
-            HistoryPeriod = period;
         }
 
-        public FuturesUsdtFundingRate(string symbol, int period)
+        public FuturesUsdtFundingRate(string symbol)
         {
             FutureUsdtSymbol = symbol;
-            HistoryPeriod = period;
         }
 
     }
