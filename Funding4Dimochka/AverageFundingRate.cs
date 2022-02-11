@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Funding4Dimochka
 {
-    public class FuturesUsdtAverageFundingRate : FuturesUsdtFundingRate
+    public class AverageFundingRate
     {
-        public decimal AverageFundingRate { get; set; }
-        public FuturesUsdtAverageFundingRate(string symbol, decimal average) : base(symbol)
-        {
-            AverageFundingRate = average;
-        }
+        public string Symbol { get; set; }
+        public decimal AvgRatePer1Day { get; set; }
+        public decimal AvgRatePer7Days { get; set; }
+        public decimal AvgRatePer30Days { get; set; }
+
     }
 }

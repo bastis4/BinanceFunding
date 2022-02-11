@@ -30,14 +30,22 @@ namespace Funding4Dimochka
             }
             return tradingSymbols;
         }
-        public async Task<FuturesUsdtAverageFundingRate> GetAverageRates(string symbol)
+        public async Task<AverageFundingRate> GetAverageRates(string symbol)
         {
-            var futuresUsdtFundigRatesList = new List<FuturesUsdtFundingRate>();
-            var callResult = await _binanceClient.FuturesUsdt.Market.GetFundingRatesAsync(symbol, startTime: DateTime.Now.AddDays(-1), endTime: DateTime.Now);
-            var averageFundingRate = callResult.Data.Average(x => x.FundingRate);
+            var callResultPer1Day = await _binanceClient.FuturesUsdt.Market.GetFundingRatesAsync(symbol, startTime: DateTime.Now.AddDays(-1), endTime: DateTime.Now);
+            var callResultPer7Days = await _binanceClient.FuturesUsdt.Market.GetFundingRatesAsync(symbol, startTime: DateTime.Now.AddDays(-7), endTime: DateTime.Now);
+            var callResultPer30Days = await _binanceClient.FuturesUsdt.Market.GetFundingRatesAsync(symbol, startTime: DateTime.Now.AddDays(-30), endTime: DateTime.Now);
 
-            FuturesUsdtAverageFundingRate futuresUsdtAverageFundingRate = new FuturesUsdtAverageFundingRate(symbol, averageFundingRate);
-            return futuresUsdtAverageFundingRate;
+            var avgPer1Day = callResultPer1Day.Data.Average(x => x.FundingRate);
+            var avgPer7Days = callResultPer7Days.Data.Average(x => x.FundingRate);
+            var avgPer30Days = callResultPer30Days.Data.Average(x => x.FundingRate);
+
+            AverageFundingRate averageFundingRate = new AverageFundingRate();
+            averageFundingRate.Symbol = symbol;
+            averageFundingRate.AvgRatePer1Day = avgPer1Day;
+            averageFundingRate.AvgRatePer7Days = avgPer7Days;
+            averageFundingRate.AvgRatePer7Days = avgPer30Days;
+            return averageFundingRate;
         }
     }
 }
