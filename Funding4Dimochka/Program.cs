@@ -1,6 +1,10 @@
 ﻿using Binance.Net;
 using Binance.Net.Objects;
 using CryptoExchange.Net.Authentication;
+using Spectre.Console;
+using System.Text;
+using System.Globalization;
+
 
 namespace Funding4Dimochka
 
@@ -22,17 +26,37 @@ namespace Funding4Dimochka
             var binanceFundingClient = new BinanceFundingClient(client);
             var tradingSymbols = await binanceFundingClient.GetTradingSymbols();
             var resultAvgFundingRates = new List<AverageFundingRate>();
-            foreach (var symbol in tradingSymbols)
-            {
-                resultAvgFundingRates.Add(await binanceFundingClient.GetAverageRates(symbol));
-            }
-            Console.WriteLine("Монета" + " " + "Среднее за 1 день" + " " + "Среднее за 7 дней" + " " + "Среднее за 30 дней");
-            foreach (var item in resultAvgFundingRates)
-            {
-                Console.WriteLine(item.Symbol + " " + item.AvgRatePer1Day + " " + item.AvgRatePer7Days + " " + item.AvgRatePer30Days);
-            }
-            Console.WriteLine("Всего монет: " + resultAvgFundingRates.Count);
+            
+            #region drawing table
+            var table = new Table().Centered();
+            table.Border(TableBorder.MinimalDoubleHead);
+
+            NumberFormatInfo setPrecision = new NumberFormatInfo();
+            setPrecision.NumberDecimalDigits = 5;
+           
+            await AnsiConsole.Live(table)
+                 .StartAsync(async ctx =>
+                 {
+                     table.AddColumn("[aquamarine1]Монета[/]").Centered();
+                     table.AddColumn("[deeppink2]Среднее за [darkolivegreen1]1[/] день[/]").Centered();
+                     table.AddColumn("[deeppink2]Среднее за [darkolivegreen1]7[/] дней[/]").Centered();
+                     table.AddColumn("[deeppink2]Среднее за [darkolivegreen1]30[/] дней[/]").Centered();
+                     foreach (var symbol in tradingSymbols)
+                     {
+                         var result = await binanceFundingClient.GetAverageRates(symbol);
+                         table.AddRow(
+                             new Markup(result.Symbol.ToString()), 
+                             new Markup(result.AvgRatePer1Day.ToString("N",setPrecision)), 
+                             new Markup(result.AvgRatePer7Days.ToString("N", setPrecision)), 
+                             new Markup(result.AvgRatePer30Days.ToString("N", setPrecision)));
+                         resultAvgFundingRates.Add(result);
+                         ctx.Refresh();
+                     }
+                     table.AddRow(new Panel("[cyan2]Всего монет: [/]" + resultAvgFundingRates.Count));
+                 });
+            #endregion
             Console.ReadKey();
         }
+
     }
 }

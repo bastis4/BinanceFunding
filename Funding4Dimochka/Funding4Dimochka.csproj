@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Binance.Net" Version="7.2.7" />
+    <PackageReference Include="Spectre.Console" Version="0.43.0" />
   </ItemGroup>
 
   <ItemGroup>
