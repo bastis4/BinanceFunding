@@ -17,12 +17,10 @@ namespace Funding4Dimochka
             Dictionary<string, string> data = new Dictionary<string, string>();
             foreach (var row in File.ReadAllLines(Environment.CurrentDirectory + @"\apikey.properties"))
                 data.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
-
             var client = new BinanceClient(new BinanceClientOptions()
             {
                 ApiCredentials = new ApiCredentials(data["API_KEY"], data["API_SECRET"])
             });
-
             var binanceFundingClient = new BinanceFundingClient(client);
             var tradingSymbols = await binanceFundingClient.GetTradingSymbols();
             var resultAvgFundingRates = new List<AverageFundingRate>();
@@ -30,10 +28,8 @@ namespace Funding4Dimochka
             #region drawing table
             var table = new Table().Centered();
             table.Border(TableBorder.MinimalDoubleHead);
-
             NumberFormatInfo setPrecision = new NumberFormatInfo();
             setPrecision.NumberDecimalDigits = 5;
-           
             await AnsiConsole.Live(table)
                  .StartAsync(async ctx =>
                  {
