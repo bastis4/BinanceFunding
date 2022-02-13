@@ -34,7 +34,7 @@ namespace Funding4Dimochka
             var avgPer7Days = callResultPer7Days.Data.Average(x => x.FundingRate);
             var avgPer30Days = callResultPer30Days.Data.Average(x => x.FundingRate);
 
-            AverageFundingRate averageFundingRate = new AverageFundingRate();
+            var averageFundingRate = new AverageFundingRate();
             averageFundingRate.Symbol = symbol;
             averageFundingRate.AvgRatePer1Day = avgPer1Day;
             averageFundingRate.AvgRatePer7Days = avgPer7Days;

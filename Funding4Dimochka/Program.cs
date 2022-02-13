@@ -14,12 +14,12 @@ namespace Funding4Dimochka
         public static async Task Main()
 
         {
-            Dictionary<string, string> data = new Dictionary<string, string>();
+            var dataCredentials = new Dictionary<string, string>();
             foreach (var row in File.ReadAllLines(Environment.CurrentDirectory + @"\apikey.properties"))
-                data.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
+                dataCredentials.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
             var client = new BinanceClient(new BinanceClientOptions()
             {
-                ApiCredentials = new ApiCredentials(data["API_KEY"], data["API_SECRET"])
+                ApiCredentials = new ApiCredentials(dataCredentials["API_KEY"], dataCredentials["API_SECRET"])
             });
             var binanceFundingClient = new BinanceFundingClient(client);
             var tradingSymbols = await binanceFundingClient.GetTradingSymbols();
@@ -28,7 +28,7 @@ namespace Funding4Dimochka
             #region drawing table
             var table = new Table().Centered();
             table.Border(TableBorder.MinimalDoubleHead);
-            NumberFormatInfo setPrecision = new NumberFormatInfo();
+            var setPrecision = new NumberFormatInfo();
             setPrecision.NumberDecimalDigits = 5;
             await AnsiConsole.Live(table)
                  .StartAsync(async ctx =>
