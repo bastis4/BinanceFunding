@@ -4,7 +4,7 @@ using CryptoExchange.Net.Authentication;
 using Spectre.Console;
 using System.Text;
 using System.Globalization;
-
+using System.Diagnostics;
 
 namespace Funding4Dimochka
 
